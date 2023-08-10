@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug 10 18:55:33 2023
+
+@author: josep
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the problem parameters
+L = 1.0  # Length of the domain
+T = 0.5  # Total simulation time
+nx = 100  # Number of grid points
+nt = 2000  # Number of time steps
+alpha = 0.1  # Thermal diffusivity
+
+dx = L / (nx - 1)  # Grid spacing
+dt = T / nt  # Time step size
+
+# Initialize the temperature array
+u = np.zeros(nx)
+u_new = np.zeros(nx)
+
+# Set the initial condition
+u[0] = 15  # Temperature at the left boundary
+u[-1] = 22  # Temperature at the right boundary
+
+# Solve the heat equation using the explicit method
+for n in range(nt):
+    for i in range(1, nx - 1):
+        u_new[i] = u[i] + alpha * dt / dx**2 * (u[i + 1] - 2 * u[i] + u[i - 1])
+    
+    # Update the temperature array for the next time step
+    u = np.copy(u_new)
+
+# Plot the final temperature distribution
+x = np.linspace(0, L, nx)
+plt.plot(x, u)
+plt.xlabel('x')
+plt.ylabel('Temperature')
+plt.title('Temperature distribution')
+plt.grid(True)
+plt.show()
